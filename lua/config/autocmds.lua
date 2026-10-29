@@ -1,0 +1,42 @@
+-- Autocmds are automatically loaded on the VeryLazy event
+-- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
+-- Add any additional autocmds here
+
+-- vim.api.nvim_create_augroup("my-luasnip", {})
+-- vim.api.nvim_create_autocmd("CompleteDone", {
+--   group = "my-luasnip",
+--   desc = "Expand LSP snippet",
+--   pattern = "*",
+--   callback = function(opts)
+--     vim.print()
+--     local comp = vim.v.completed_item
+--     vim.print(comp)
+--
+--     -- check that this is an lsp completeion
+--     if not vim.tbl_get(comp, "user_data", "nvim", "lsp") then
+--       return
+--     end
+--
+--     -- check that we were given a snippet
+--     local complet_info = comp.user_data.nvim.lsp.completed_item
+--     if not complet_info.insertTextFormat or complet_info.insertTextFormat == 1 then
+--       return
+--     end
+--
+--     -- remove the inserted text
+--     local start_col = complet_info.textEdit.range.start.character + 1
+--     vim.fn.cursor(vim.fn.line("."), start_col)
+--     vim.cmd.normal({ args = { "d" .. #comp.word .. "l" } })
+--
+--     -- if the inrerted text was the last text on the line, the deletion command will leave the cursor 1 column left
+--     -- of wher we need to insert the snippet (because insert mode can put the cursor 1 position ahead of the last column)
+--     -- move the cursor back over 1
+--     vim.fn.cursor(vim.fn.line("."), start_col)
+--
+--     -- insert snippet
+--     local snip_text = vim.tbl_get(complet_info, "textEdit", "newText") or comp.insertText
+--     assert(snip_text, "Language server indicated it had a snippet, but no snippet text could be found!")
+--     require("luasnip").lsp_expand(snip_text)
+--   end,
+-- })
+--
