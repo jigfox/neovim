@@ -7,7 +7,7 @@ local outer_terminal = vim.fn.expand("~/.config/herdr/outer.sh")
 local in_ghostty = vim.env.TERM_PROGRAM == "ghostty"
 
 -- move to the nvim split in `dir`; at the nvim edge hand off to herdr (if inside herdr) or kitty
-local function navigate(wincmd, dir, kitty_cmd)
+local function navigate(wincmd, dir, kitty_dir)
   return function()
     local win = vim.api.nvim_get_current_win()
     vim.cmd("wincmd " .. wincmd)
@@ -19,7 +19,7 @@ local function navigate(wincmd, dir, kitty_cmd)
     elseif in_ghostty then
       vim.fn.jobstart({ outer_terminal, "nav", dir }, { detach = true })
     elseif vim.env.KITTY_PID ~= nil then
-      vim.cmd(kitty_cmd)
+      vim.fn.jobstart({ "kitten", "@", "focus-window", "--match", "neighbor:" .. kitty_dir }, { detach = true })
     end
   end
 end
@@ -72,15 +72,15 @@ return {
       return vim.env.KITTY_PID ~= nil or vim.env.HERDR_ENV == "1" or in_ghostty
     end,
     keys = {
-      { "<C-h>", navigate("h", "left", "KittyNavigateLeft"), silent = true, desc = "Navigate left" },
-      { "<C-l>", navigate("l", "right", "KittyNavigateRight"), silent = true, desc = "Navigate right" },
-      { "<C-j>", navigate("j", "down", "KittyNavigateDown"), silent = true, desc = "Navigate down" },
-      { "<C-k>", navigate("k", "up", "KittyNavigateUp"), silent = true, desc = "Navigate up" },
+      { "<C-h>", navigate("h", "left", "left"), silent = true, desc = "Navigate left" },
+      { "<C-l>", navigate("l", "right", "right"), silent = true, desc = "Navigate right" },
+      { "<C-j>", navigate("j", "down", "bottom"), silent = true, desc = "Navigate down" },
+      { "<C-k>", navigate("k", "up", "top"), silent = true, desc = "Navigate up" },
       { "<C-S-h>", resize("left", "left", "ctrl+shift+h"), silent = true, desc = "Resize left" },
       { "<C-S-l>", resize("right", "right", "ctrl+shift+l"), silent = true, desc = "Resize right" },
       { "<C-S-j>", resize("down", "bottom", "ctrl+shift+j"), silent = true, desc = "Resize down" },
       { "<C-S-k>", resize("up", "top", "ctrl+shift+k"), silent = true, desc = "Resize up" },
     },
-    opts = {},
+    -- no opts: setup() would overwrite the keys above with its kitty-only mappings
   },
 }
