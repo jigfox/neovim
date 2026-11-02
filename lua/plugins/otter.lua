@@ -25,20 +25,22 @@ return {
       })
     end,
     keys = {
-      "<leader>co",
-      function()
-        local otter = require("otter")
-        if vim.b.otter_active then
-          otter.deactivate()
-          vim.b.otter_active = false
-          vim.notify("Otter validation disabled", vim.log.levels.WARN, { title = "Otter" })
-        else
-          otter.activate({ "yaml" }, true, true, nil)
-          vim.b.otter_active = true
-          vim.notify("Otter validation enabled", vim.log.levels.INFO, { title = "Otter" })
-        end
-      end,
-      desc = "Toggle Otter (Injected LSP)",
+      {
+        "<leader>co",
+        function()
+          local otter = require("otter")
+          if vim.b.otter_active then
+            otter.deactivate()
+            vim.b.otter_active = false
+            vim.notify("Otter validation disabled", vim.log.levels.WARN, { title = "Otter" })
+          else
+            otter.activate({ "yaml" }, true, true, nil)
+            vim.b.otter_active = true
+            vim.notify("Otter validation enabled", vim.log.levels.INFO, { title = "Otter" })
+          end
+        end,
+        desc = "Toggle Otter (Injected LSP)",
+      },
     },
   },
   {
